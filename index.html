@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Conversation Study</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="survey-card">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+
+            <!-- Page 1: Consent -->
+            <div class="page active" id="page1">
+                <h1>Research Study Consent</h1>
+                <div class="consent-text">
+                    <h3>Consent to Participate in Research</h3>
+                    <p><strong>Study Title:</strong> Human Reactions to Robots Joining Ongoing Conversations</p>
+                    <br>
+                    <p><strong>Purpose:</strong> This study aims to understand how humans react when a mobile robot joins an ongoing conversation between a stationary robot and a human participant.</p>
+                    <br>
+                    <p><strong>What You'll Do:</strong> You will watch several video simulations showing robot interactions and rate them on a scale of 0-10. The entire study should take approximately 15-20 minutes.</p>
+                    <br>
+                    <p><strong>Confidentiality:</strong> All responses will be kept confidential and used only for research purposes. Your demographic information will be collected but not linked to your identity.</p>
+                    <br>
+                    <p><strong>Voluntary Participation:</strong> Your participation is entirely voluntary and you may withdraw at any time.</p>
+                </div>
+                
+                <div class="checkbox-group">
+                    <input type="checkbox" id="consent" required>
+                    <label for="consent">I agree to participate in this research study and understand the terms outlined above.</label>
+                </div>
+                
+                <div class="btn-group">
+                    <div></div>
+                    <button class="btn btn-primary" onclick="nextPage()" id="consentBtn" disabled>Begin Study</button>
+                </div>
+            </div>
+
+            <!-- Page 2: Introduction -->
+            <div class="page" id="page2">
+                <h1>Study Introduction</h1>
+                <h2>About This Study</h2>
+                <p>In this study, you will observe video simulations created using NVIDIA Isaac Sim, showing scenarios where mobile robots interact with humans and stationary robots in conversational settings.</p>
+                <br>
+                <h2>What to Expect</h2>
+                <ul style="line-height: 1.8; margin-left: 20px;">
+                    <li>You will watch <strong>10 video clips</strong> of robot interactions</li>
+                    <li>Each video must be watched completely - no skipping or fast-forwarding</li>
+                    <li>After each video, you'll answer a brief attention check question</li>
+                    <li>Rate each interaction on a scale from 0 (very poor) to 10 (excellent)</li>
+                    <li>Finally, provide some demographic information</li>
+                </ul>
+                <br>
+                <h2>Important Instructions</h2>
+                <div class="consent-text">
+                    <p>• Please watch each video attentively and in full</p>
+                    <p>• Consider factors like naturalness, appropriateness, and social acceptance</p>
+                    <p>• Answer all questions honestly based on your genuine reactions</p>
+                    <p>• The study will take approximately 15-20 minutes to complete</p>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="prevPage()">Back</button>
+                    <button class="btn btn-primary" onclick="nextPage()">Start Videos</button>
+                </div>
+            </div>
+
+            <!-- Video Pages (3-12) -->
+            <div class="page" id="videoPage">
+                <h1>Video <span id="videoNumber">1</span> of 10</h1>
+                <h2>Please watch the video completely</h2>
+                
+                <div class="video-container">
+                    <video id="studyVideo" preload="metadata">
+                        <source src="" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="video-overlay" id="videoOverlay">
+                        <div>Click to start video</div>
+                    </div>
+                </div>
+
+                <!-- <div class="attention-check" id="attentionCheck" style="display: none;">
+                    <div class="attention-question" id="attentionQuestion">
+                        What color was the mobile robot in the video?
+                    </div>
+                    <div class="radio-group" id="attentionOptions">
+                        <div class="radio-option">
+                            <input type="radio" name="attention" value="blue" id="att1">
+                            <label for="att1">Blue</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="attention" value="red" id="att2">
+                            <label for="att2">Red</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="attention" value="white" id="att3">
+                            <label for="att3">White</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" name="attention" value="black" id="att4">
+                            <label for="att4">Black</label>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="rating-container" id="ratingSection" style="display: none;">
+                    <h3>Rate this robot interaction</h3>
+                    <p>Consider factors like naturalness, appropriateness, and social acceptance</p>
+                    
+                    <div class="slider-container">
+                        <input type="range" min="0" max="10" value="5" class="slider" id="ratingSlider">
+                        <div class="rating-display">
+                            <span>0 - Very Poor</span>
+                            <div>
+                                <div class="rating-value" id="ratingValue">5</div>
+                                <div class="rating-label" id="ratingLabel">Average</div>
+                            </div>
+                            <span>10 - Excellent</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="prevPage()" id="videoPrevBtn">Back</button>
+                    <button class="btn btn-primary" onclick="nextVideo()" id="videoNextBtn" disabled>Next Video</button>
+                </div>
+            </div>
+
+            <!-- Page 13: Demographics -->
+            <div class="page" id="demographics">
+                <h1>Demographic Information</h1>
+                <p>Please provide the following information to help us analyze the results:</p>
+                
+                <div class="demographics-grid">
+                    <div class="form-group">
+                        <label for="age">Age *</label>
+                        <select id="age" required>
+                            <option value="">Select age range</option>
+                            <option value="18-24">18-24</option>
+                            <option value="25-34">25-34</option>
+                            <option value="35-44">35-44</option>
+                            <option value="45-54">45-54</option>
+                            <option value="55-64">55-64</option>
+                            <option value="65+">65+</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gender">Gender *</label>
+                        <select id="gender" required>
+                            <option value="">Select gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="non-binary">Non-binary</option>
+                            <option value="prefer-not-to-say">Prefer not to say</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="education">Education Level *</label>
+                        <select id="education" required>
+                            <option value="">Select education level</option>
+                            <option value="high-school">High School</option>
+                            <option value="some-college">Some College</option>
+                            <option value="bachelor">Bachelor's Degree</option>
+                            <option value="master">Master's Degree</option>
+                            <option value="phd">PhD/Doctorate</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="profession">Profession *</label>
+                        <select id="profession" required>
+                            <option value="">Select profession</option>
+                            <option value="student">Student</option>
+                            <option value="technology">Technology/IT</option>
+                            <option value="healthcare">Healthcare</option>
+                            <option value="education">Education</option>
+                            <option value="business">Business/Finance</option>
+                            <option value="engineering">Engineering</option>
+                            <option value="arts">Arts/Creative</option>
+                            <option value="service">Service Industry</option>
+                            <option value="retired">Retired</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="robotExperience">Experience with Robots *</label>
+                        <select id="robotExperience" required>
+                            <option value="">Select experience level</option>
+                            <option value="none">No experience</option>
+                            <option value="minimal">Minimal (seen in media)</option>
+                            <option value="some">Some (used simple robots)</option>
+                            <option value="moderate">Moderate (regular interaction)</option>
+                            <option value="extensive">Extensive (professional/research)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="techComfort">Comfort with Technology *</label>
+                        <select id="techComfort" required>
+                            <option value="">Select comfort level</option>
+                            <option value="very-low">Very Low</option>
+                            <option value="low">Low</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="high">High</option>
+                            <option value="very-high">Very High</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="prevPage()">Back</button>
+                    <button class="btn btn-primary" onclick="submitSurvey()" id="submitBtn" disabled>Submit Survey</button>
+                </div>
+            </div>
+
+            <!-- Page 14: Completion -->
+            <div class="page" id="completion">
+                <div class="completion-message">
+                    <h2>✓ Survey Completed!</h2>
+                    <p>Thank you for participating in our robot interaction study. Your responses have been recorded and will contribute to our understanding of human-robot social interactions.</p>
+                    <br>
+                    <p>If you have any questions about this research, please feel free to contact the research team.</p>
+                    <br>
+                    <p><strong>You may now close this window.</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Survey state management
+        let currentPage = 1;
+        let currentVideo = 1;
+        let totalVideos = 10;
+        let videoCompleted = false;
+        let attentionAnswered = false;
+        let ratingGiven = false;
+        let surveyData = {
+            participantId: generateParticipantId(),
+            startTime: new Date().toISOString(),
+            videos: [],
+            demographics: {},
+            completed: false
+        };
+
+        // Video data - in real implementation, this would come from backend
+        const videoData = [
+            { id: 1, filename: 'video1.mp4', attentionQuestion: 'What color was the mobile robot?', correctAnswer: 'blue', options: ['Blue', 'Red', 'White', 'Black'] },
+            { id: 2, filename: 'video2.mp4', attentionQuestion: 'How many humans were in the scene?', correctAnswer: '2', options: ['1', '2', '3', '4'] },
+            { id: 3, filename: 'video3.mp4', attentionQuestion: 'What was the stationary robot doing?', correctAnswer: 'talking', options: ['Standing still', 'Talking', 'Moving arms', 'Turning around'] },
+            { id: 4, filename: 'video4.mp4', attentionQuestion: 'In which direction did the mobile robot approach?', correctAnswer: 'left', options: ['From the left', 'From the right', 'From behind', 'From the front'] },
+            { id: 5, filename: 'video5.mp4', attentionQuestion: 'What was the human holding?', correctAnswer: 'cup', options: ['Nothing', 'A book', 'A cup', 'A phone'] },
+            { id: 6, filename: 'video6.mp4', attentionQuestion: 'How did the conversation end?', correctAnswer: 'naturally', options: ['Abruptly', 'Naturally', 'With interruption', 'Unclear'] },
+            { id: 7, filename: 'video7.mp4', attentionQuestion: 'What gesture did the mobile robot make?', correctAnswer: 'wave', options: ['No gesture', 'Wave', 'Point', 'Thumbs up'] },
+            { id: 8, filename: 'video8.mp4', attentionQuestion: 'What was the setting of the scene?', correctAnswer: 'office', options: ['Home', 'Office', 'Laboratory', 'Cafe'] },
+            { id: 9, filename: 'video9.mp4', attentionQuestion: 'How long did the interaction last?', correctAnswer: 'medium', options: ['Very short', 'Short', 'Medium', 'Long'] },
+            { id: 10, filename: 'video10.mp4', attentionQuestion: 'What was the overall mood?', correctAnswer: 'friendly', options: ['Tense', 'Friendly', 'Formal', 'Awkward'] }
+        ];
+
+        function generateParticipantId() {
+            return 'P' + Date.now() + '_' + Math.random().toString(36).substr(2, 5);
+        }
+
+        function updateProgress() {
+            const totalPages = 14;
+            const progress = (currentPage / totalPages) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function showPage(pageNum) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            
+            if (pageNum <= 2) {
+                document.getElementById('page' + pageNum).classList.add('active');
+            } else if (pageNum >= 3 && pageNum <= 12) {
+                document.getElementById('videoPage').classList.add('active');
+                loadVideo(pageNum - 2);
+            } else if (pageNum === 13) {
+                document.getElementById('demographics').classList.add('active');
+            } else if (pageNum === 14) {
+                document.getElementById('completion').classList.add('active');
+            }
+            
+            updateProgress();
+            saveProgress();
+        }
+
+        function nextPage() {
+            if (currentPage === 1 && !document.getElementById('consent').checked) {
+                alert('Please provide consent to continue.');
+                return;
+            }
+            
+            if (currentPage >= 3 && currentPage <= 12) {
+                if (!videoCompleted) {
+                    alert('Please watch the complete video first.');
+                    return;
+                }
+                if (!attentionAnswered) {
+                    alert('Please answer the attention check question.');
+                    return;
+                }
+                if (!ratingGiven) {
+                    alert('Please provide a rating for this video.');
+                    return;
+                }
+            }
+            
+            if (currentPage === 13 && !validateDemographics()) {
+                alert('Please fill in all required demographic information.');
+                return;
+            }
+            
+            currentPage++;
+            showPage(currentPage);
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                showPage(currentPage);
+            }
+        }
+
+        function nextVideo() {
+            // Save current video data
+            saveVideoResponse();
+            
+            if (currentVideo < totalVideos) {
+                currentVideo++;
+                currentPage++;
+                resetVideoState();
+                showPage(currentPage);
+            } else {
+                // All videos completed, go to demographics
+                currentPage = 13;
+                showPage(currentPage);
+            }
+        }
+
+        function loadVideo(videoIndex) {
+            const video = videoData[videoIndex - 1];
+            document.getElementById('videoNumber').textContent = videoIndex;
+            document.getElementById('studyVideo').src = 'videos/' + video.filename;
+            document.getElementById('attentionQuestion').textContent = video.attentionQuestion;
+            
+            // Update attention check options
+            const optionsContainer = document.getElementById('attentionOptions');
+            optionsContainer.innerHTML = '';
+            video.options.forEach((option, index) => {
+                const div = document.createElement('div');
+                div.className = 'radio-option';
+                div.innerHTML = `
+                    <input type="radio" name="attention" value="${option.toLowerCase().replace(/\s+/g, '-')}" id="att${index + 1}">
+                    <label for="att${index + 1}">${option}</label>
+                `;
+                optionsContainer.appendChild(div);
+            });
+            
+            resetVideoState();
+            setupVideoHandlers();
+        }
+
+        function resetVideoState() {
+            videoCompleted = false;
+            attentionAnswered = false;
+            ratingGiven = false;
+            document.getElementById('attentionCheck').style.display = 'none';
+            document.getElementById('ratingSection').style.display = 'none';
+            document.getElementById('videoNextBtn').disabled = true;
+            document.getElementById('videoOverlay').classList.remove('hidden');
+            document.querySelectorAll('input[name="attention"]').forEach(input => {
+                input.checked = false;
+                input.addEventListener('change', checkAttentionAnswer);
+            });
+        }
+
+        function setupVideoHandlers() {
+            const video = document.getElementById('studyVideo');
+            const overlay = document.getElementById('videoOverlay');
+            
+            // Disable all video controls
+            video.controls = false;
+            video.controlsList = 'nodownload nofullscreen noremoteplayback';
+            video.disablePictureInPicture = true;
+            
+            // Prevent right-click context menu
+            video.addEventListener('contextmenu', e => e.preventDefault());
+            
+            // Overlay click to start video
+            overlay.addEventListener('click', () => {
+                video.play();
+                overlay.classList.add('hidden');
+            });
+            
+            // Video ended event
+            video.addEventListener('ended', () => {
+                videoCompleted = true;
+                document.getElementById('attentionCheck').style.display = 'block';
+                checkVideoState();
+            });
+            
+            // Prevent seeking
+            video.addEventListener('seeking', () => {
+                if (video.currentTime !== video.duration) {
+                    video.currentTime = 0;
+                    alert('Please watch the video from the beginning without skipping.');
+                }
+            });
+        }
+
+        function checkAttentionAnswer() {
+            attentionAnswered = document.querySelector('input[name="attention"]:checked') !== null;
+            if (attentionAnswered) {
+                document.getElementById('ratingSection').style.display = 'block';
+            }
+            checkVideoState();
+        }
+
+        function checkVideoState() {
+            const canProceed = videoCompleted && attentionAnswered && ratingGiven;
+            document.getElementById('videoNextBtn').disabled = !canProceed;
+        }
+
+        function saveVideoResponse() {
+            const attentionAnswer = document.querySelector('input[name="attention"]:checked')?.value;
+            const rating = document.getElementById('ratingSlider').value;
+            const currentVideoData = videoData[currentVideo - 1];
+            
+            surveyData.videos.push({
+                videoId: currentVideoData.id,
+                filename: currentVideoData.filename,
+                attentionQuestion: currentVideoData.attentionQuestion,
+                attentionAnswer: attentionAnswer,
+                correctAnswer: currentVideoData.correctAnswer,
+                rating: parseInt(rating),
+                timestamp: new Date().toISOString()
+            });
+        }
+
+        function validateDemographics() {
+            const required = ['age', 'gender', 'education', 'profession', 'robotExperience', 'techComfort'];
+            return required.every(field => document.getElementById(field).value !== '');
+        }
+
+        function submitSurvey() {
+            if (!validateDemographics()) return;
+            
+            // Collect demographic data
+            surveyData.demographics = {
+                age: document.getElementById('age').value,
+                gender: document.getElementById('gender').value,
+                education: document.getElementById('education').value,
+                profession: document.getElementById('profession').value,
+                robotExperience: document.getElementById('robotExperience').value,
+                techComfort: document.getElementById('techComfort').value
+            };
+            
+            surveyData.completed = true;
+            surveyData.endTime = new Date().toISOString();
+            
+            // Submit data to backend
+            submitToBackend(surveyData);
+            
+            currentPage = 14;
+            showPage(currentPage);
+        }
+
+        async function submitToBackend(data) {
+            try {
+                const response = await fetch('/api/submit-survey', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to submit survey');
+                }
+                
+                // Clear saved progress
+                localStorage.removeItem('surveyProgress');
+                
+            } catch (error) {
+                console.error('Error submitting survey:', error);
+                alert('There was an error submitting your survey. Please try again or contact the research team.');
+            }
+        }
+
+        function saveProgress() {
+            const progressData = {
+                currentPage,
+                currentVideo,
+                surveyData,
+                videoCompleted,
+                attentionAnswered,
+                ratingGiven
+            };
+            localStorage.setItem('surveyProgress', JSON.stringify(progressData));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('surveyProgress');
+            if (saved) {
+                const data = JSON.parse(saved);
+                currentPage = data.currentPage;
+                currentVideo = data.currentVideo;
+                surveyData = data.surveyData;
+                videoCompleted = data.videoCompleted;
+                attentionAnswered = data.attentionAnswered;
+                ratingGiven = data.ratingGiven;
+                
+                showPage(currentPage);
+                return true;
+            }
+            return false;
+        }
+
+        // Rating slider functionality
+        function setupRatingSlider() {
+            const slider = document.getElementById('ratingSlider');
+            const valueDisplay = document.getElementById('ratingValue');
+            const labelDisplay = document.getElementById('ratingLabel');
+            
+            const labels = [
+                'Very Poor', 'Very Poor', 'Poor', 'Poor', 'Below Average',
+                'Average', 'Above Average', 'Good', 'Good', 'Excellent', 'Excellent'
+            ];
+            
+            slider.addEventListener('input', function() {
+                const value = parseInt(this.value);
+                valueDisplay.textContent = value;
+                labelDisplay.textContent = labels[value];
+                ratingGiven = true;
+                checkVideoState();
+            });
+        }
+
+        // Consent checkbox handler
+        function setupConsentHandler() {
+            const consentCheckbox = document.getElementById('consent');
+            const consentBtn = document.getElementById('consentBtn');
+            
+            consentCheckbox.addEventListener('change', function() {
+                consentBtn.disabled = !this.checked;
+            });
+        }
+
+        // Demographics validation
+        function setupDemographicsValidation() {
+            const required = ['age', 'gender', 'education', 'profession', 'robotExperience', 'techComfort'];
+            const submitBtn = document.getElementById('submitBtn');
+            
+            required.forEach(fieldId => {
+                document.getElementById(fieldId).addEventListener('change', function() {
+                    const allFilled = required.every(id => document.getElementById(id).value !== '');
+                    submitBtn.disabled = !allFilled;
+                });
+            });
+        }
+
+        // Tab visibility detection for attention monitoring
+        function setupTabVisibilityMonitoring() {
+            let tabSwitchCount = 0;
+            
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden && currentPage >= 3 && currentPage <= 12) {
+                    tabSwitchCount++;
+                    surveyData.tabSwitches = tabSwitchCount;
+                    
+                    if (tabSwitchCount > 3) {
+                        alert('Please keep this tab active while watching videos to ensure data quality.');
+                    }
+                }
+            });
+        }
+
+        // Prevent back button navigation
+        function preventBackNavigation() {
+            history.pushState(null, null, location.href);
+            window.addEventListener('popstate', function() {
+                history.pushState(null, null, location.href);
+                if (confirm('Are you sure you want to leave the survey? Your progress will be saved.')) {
+                    // Allow navigation but save progress
+                    saveProgress();
+                }
+            });
+        }
+
+        // Initialize survey
+        function initializeSurvey() {
+            setupConsentHandler();
+            setupRatingSlider();
+            setupDemographicsValidation();
+            setupTabVisibilityMonitoring();
+            preventBackNavigation();
+            
+            // Check for saved progress
+            if (!loadProgress()) {
+                showPage(1);
+            }
+            
+            // Check for duplicate participation
+            checkDuplicateParticipation();
+        }
+
+        async function checkDuplicateParticipation() {
+            try {
+                const response = await fetch('/api/check-participant', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        fingerprint: generateFingerprint()
+                    })
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.alreadyParticipated) {
+                        alert('It appears you have already participated in this study. Thank you for your previous participation.');
+                        document.body.innerHTML = '<div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;"><h2>Study Already Completed</h2><p>Thank you for your interest, but you have already participated in this study.</p></div>';
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking participation:', error);
+            }
+        }
+
+        function generateFingerprint() {
+            // Simple browser fingerprinting for duplicate detection
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            ctx.textBaseline = 'top';
+            ctx.font = '14px Arial';
+            ctx.fillText('Browser fingerprint', 2, 2);
+            
+            return {
+                userAgent: navigator.userAgent,
+                screen: `${screen.width}x${screen.height}`,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                language: navigator.language,
+                canvas: canvas.toDataURL()
+            };
+        }
+
+        // Keyboard shortcuts for testing (remove in production)
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.shiftKey && e.key === 'T') {
+                // Skip to next page for testing
+                nextPage();
+            }
+        });
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeSurvey);
+    </script>
+</body>
+</html>
