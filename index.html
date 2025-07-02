@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Robot Conversation Study</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
     <div class="container">
@@ -84,7 +84,7 @@
                     </div>
                 </div>
 
-                <!-- <div class="attention-check" id="attentionCheck" style="display: none;">
+                <div class="attention-check" id="attentionCheck" style="display: none;">
                     <div class="attention-question" id="attentionQuestion">
                         What color was the mobile robot in the video?
                     </div>
@@ -106,7 +106,7 @@
                             <label for="att4">Black</label>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
                 <div class="rating-container" id="ratingSection" style="display: none;">
                     <h3>Rate this robot interaction</h3>
@@ -137,29 +137,15 @@
                 <p>Please provide the following information to help us analyze the results:</p>
                 
                 <div class="demographics-grid">
-                    <div class="form-group">
-                        <label for="age">Age *</label>
-                        <select id="age" required>
-                            <option value="">Select age range</option>
-                            <option value="18-24">18-24</option>
-                            <option value="25-34">25-34</option>
-                            <option value="35-44">35-44</option>
-                            <option value="45-54">45-54</option>
-                            <option value="55-64">55-64</option>
-                            <option value="65+">65+</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="gender">Gender *</label>
-                        <select id="gender" required>
-                            <option value="">Select gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="non-binary">Non-binary</option>
-                            <option value="prefer-not-to-say">Prefer not to say</option>
-                        </select>
-                    </div>
+		    <div class="form-group">
+			<label for="age">Age *</label>
+			<input type="text" id="age" name="age" placeholder="Enter your age or age range" required>
+		    </div>
+    
+		    <div class="form-group">
+			<label for="gender">Gender *</label>
+			<input type="text" id="gender" name="gender" placeholder="Enter your gender identity" required>
+		    </div>
                     
                     <div class="form-group">
                         <label for="education">Education Level *</label>
@@ -240,7 +226,7 @@
         // Survey state management
         let currentPage = 1;
         let currentVideo = 1;
-        let totalVideos = 10;
+        let totalVideos = 1;
         let videoCompleted = false;
         let attentionAnswered = false;
         let ratingGiven = false;
@@ -254,16 +240,16 @@
 
         // Video data - in real implementation, this would come from backend
         const videoData = [
-            { id: 1, filename: 'video1.mp4', attentionQuestion: 'What color was the mobile robot?', correctAnswer: 'blue', options: ['Blue', 'Red', 'White', 'Black'] },
-            { id: 2, filename: 'video2.mp4', attentionQuestion: 'How many humans were in the scene?', correctAnswer: '2', options: ['1', '2', '3', '4'] },
-            { id: 3, filename: 'video3.mp4', attentionQuestion: 'What was the stationary robot doing?', correctAnswer: 'talking', options: ['Standing still', 'Talking', 'Moving arms', 'Turning around'] },
-            { id: 4, filename: 'video4.mp4', attentionQuestion: 'In which direction did the mobile robot approach?', correctAnswer: 'left', options: ['From the left', 'From the right', 'From behind', 'From the front'] },
-            { id: 5, filename: 'video5.mp4', attentionQuestion: 'What was the human holding?', correctAnswer: 'cup', options: ['Nothing', 'A book', 'A cup', 'A phone'] },
-            { id: 6, filename: 'video6.mp4', attentionQuestion: 'How did the conversation end?', correctAnswer: 'naturally', options: ['Abruptly', 'Naturally', 'With interruption', 'Unclear'] },
-            { id: 7, filename: 'video7.mp4', attentionQuestion: 'What gesture did the mobile robot make?', correctAnswer: 'wave', options: ['No gesture', 'Wave', 'Point', 'Thumbs up'] },
-            { id: 8, filename: 'video8.mp4', attentionQuestion: 'What was the setting of the scene?', correctAnswer: 'office', options: ['Home', 'Office', 'Laboratory', 'Cafe'] },
-            { id: 9, filename: 'video9.mp4', attentionQuestion: 'How long did the interaction last?', correctAnswer: 'medium', options: ['Very short', 'Short', 'Medium', 'Long'] },
-            { id: 10, filename: 'video10.mp4', attentionQuestion: 'What was the overall mood?', correctAnswer: 'friendly', options: ['Tense', 'Friendly', 'Formal', 'Awkward'] }
+            { id: 1, filename: 'video_1.mp4', attentionQuestion: 'What color was the mobile robot?', correctAnswer: 'blue', options: ['Blue', 'Red', 'White', 'Black'] },
+            { id: 2, filename: 'video_2.mp4', attentionQuestion: 'How many humans were in the scene?', correctAnswer: '2', options: ['1', '2', '3', '4'] },
+            { id: 3, filename: 'video_3.mp4', attentionQuestion: 'What was the stationary robot doing?', correctAnswer: 'talking', options: ['Standing still', 'Talking', 'Moving arms', 'Turning around'] },
+            { id: 4, filename: 'video_4.mp4', attentionQuestion: 'In which direction did the mobile robot approach?', correctAnswer: 'left', options: ['From the left', 'From the right', 'From behind', 'From the front'] },
+            { id: 5, filename: 'video_5.mp4', attentionQuestion: 'What was the human holding?', correctAnswer: 'cup', options: ['Nothing', 'A book', 'A cup', 'A phone'] },
+            { id: 6, filename: 'video_6.mp4', attentionQuestion: 'How did the conversation end?', correctAnswer: 'naturally', options: ['Abruptly', 'Naturally', 'With interruption', 'Unclear'] },
+            { id: 7, filename: 'video_7.mp4', attentionQuestion: 'What gesture did the mobile robot make?', correctAnswer: 'wave', options: ['No gesture', 'Wave', 'Point', 'Thumbs up'] },
+            { id: 8, filename: 'video_8.mp4', attentionQuestion: 'What was the setting of the scene?', correctAnswer: 'office', options: ['Home', 'Office', 'Laboratory', 'Cafe'] },
+            { id: 9, filename: 'video_9.mp4', attentionQuestion: 'How long did the interaction last?', correctAnswer: 'medium', options: ['Very short', 'Short', 'Medium', 'Long'] },
+            { id: 10, filename: 'video_10.mp4', attentionQuestion: 'What was the overall mood?', correctAnswer: 'friendly', options: ['Tense', 'Friendly', 'Formal', 'Awkward'] }
         ];
 
         function generateParticipantId() {
@@ -612,7 +598,7 @@
             }
             
             // Check for duplicate participation
-            checkDuplicateParticipation();
+            // checkDuplicateParticipation();
         }
 
         async function checkDuplicateParticipation() {

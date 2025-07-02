@@ -13,7 +13,7 @@ app = Flask(__name__)
 # Generate a secure SECRET_KEY if not provided via environment variable
 SECRET_KEY = os.environ.get('SECRET_KEY') # or secrets.token_hex(32)
 app.config['SECRET_KEY'] = SECRET_KEY
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('SQLALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///robot_study.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -54,8 +54,8 @@ class Demographics(db.Model):
 
 # Video Configuration
 VIDEO_CONFIG = {
-    'total_videos': 100,
-    'videos_per_participant': 10,
+    'total_videos': 1,
+    'videos_per_participant': 1,
     'video_folder': 'videos'
 }
 
