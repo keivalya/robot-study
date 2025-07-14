@@ -123,7 +123,7 @@ def select_videos_for_participant():
             'correct': 'friendly'
         }
     ]
-    
+
     for i, video_id in enumerate(selected):
         question_data = attention_questions[i % len(attention_questions)]
         video_data.append({
@@ -133,7 +133,7 @@ def select_videos_for_participant():
             'correctAnswer': question_data['correct'],
             'options': question_data['options']
         })
-    
+
     return video_data
 
 @app.route('/')
@@ -152,11 +152,11 @@ def check_participant():
     try:
         data = request.get_json()
         fingerprint_hash = create_fingerprint_hash(data['fingerprint'])
-        
+
         existing_participant = Participant.query.filter_by(
             fingerprint_hash=fingerprint_hash
         ).first()
-        
+
         if existing_participant and existing_participant.completed:
             return jsonify({'alreadyParticipated': True})
         
@@ -361,8 +361,8 @@ if __name__ == '__main__':
     print("Robot Conversation Study Server Starting...")
     print(f"Place your video files in the '{VIDEO_CONFIG['video_folder']}' directory")
     print("Videos should be named: video_1.mp4, video_2.mp4, ..., video_100.mp4")
-    print("Access the survey at: http://localhost:5000")
-    print("Admin stats at: http://localhost:5000/api/admin/stats")
-    print("Export data at: http://localhost:5000/api/admin/export")
+    print("Access the survey at: http://localhost:8000")
+    print("Admin stats at: http://localhost:8000/api/admin/stats")
+    print("Export data at: http://localhost:8000/api/admin/export")
     
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=8000)
